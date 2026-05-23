@@ -1,28 +1,39 @@
 import pytest
-# TODO: add necessary import
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from ml.model import train_model, compute_model_metrics
 
-# TODO: implement the first test. Change the function name and input as needed
-def test_one():
+def test_train_model_returns_correct_type():
     """
-    # add description for the first test
+    Test that train_model returns a RandomForestClassifier instance
     """
-    # Your code here
-    pass
-
-
-# TODO: implement the second test. Change the function name and input as needed
-def test_two():
-    """
-    # add description for the second test
-    """
-    # Your code here
-    pass
+    X_test = np.array([[1, 2], [3, 4]])
+    y_test = np.array([0, 1])
+    model = train_model(X_test, y_test)
+    assert isinstance(model, RandomForestClassifier)
 
 
-# TODO: implement the third test. Change the function name and input as needed
-def test_three():
+def test_compute_model_metrics_returns_three_floats():
     """
-    # add description for the third test
+    Test that compute_model_metrics returns three float values
     """
-    # Your code here
-    pass
+    y_test = np.array([1, 0])
+    y_pred_test = np.array([1, 1])
+    precision, recall, fbeta = compute_model_metrics(y_test, y_pred_test)
+    assert isinstance(precision, float)
+    assert isinstance(recall, float)
+    assert isinstance(fbeta, float)
+
+
+def test_training_set_size():
+    """
+    Test that the data split creates a train dataset of the expected size
+    """
+    test_data = pd.DataFrame({
+        "age": [54, 12, 33, 28, 65, 19, 88, 22, 66, 99],
+        "salary": ["<=50K"] * 10
+    })
+    test_train, _ = train_test_split(test_data, test_size=0.20, random_state=42)
+    assert len(test_train) == 8
